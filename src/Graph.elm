@@ -41,9 +41,6 @@ drawGraph (viewW, viewH) (min, max) data =
             -- List.range 0 (List.length data)
             -- |> List.map (\x -> toFloat x / toFloat (List.length data) * (toFloat viewW))
 
-        _ = Debug.log "x_points" x_points
-
-
         y_points = List.map Tuple.second data
 
         pointsString =
