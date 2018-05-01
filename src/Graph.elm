@@ -29,12 +29,10 @@ transformToGraphCoordinates invert viewHeight (minVal, maxVal) val =
 {-|
     Creates an svg object from a set of values, the size of the viewport and a range of values to display
 -}
-drawGraph : (Int, Int) -> (Float, Float) -> List (Float, Float) -> Svg a
-drawGraph (viewW, viewH) (min, max) data =
+drawGraph : (Int, Int) -> (Float, Float) -> (Float, Float) -> List (Float, Float) -> Svg a
+drawGraph (viewW, viewH) (minVal, maxVal) (minTime, maxTime) data =
     let
         times = List.map Tuple.first data
-        minTime = Maybe.withDefault 0 <| List.minimum times
-        maxTime = Maybe.withDefault 1 <| List.maximum times
 
         x_points =
             List.map (transformToGraphCoordinates False (toFloat viewW) (minTime, maxTime)) times
@@ -44,7 +42,7 @@ drawGraph (viewW, viewH) (min, max) data =
         y_points = List.map Tuple.second data
 
         pointsString =
-            List.map (transformToGraphCoordinates True (toFloat viewH) (min, max)) y_points
+            List.map (transformToGraphCoordinates True (toFloat viewH) (minVal, maxVal)) y_points
             |> List.map2 (,) x_points
             |> List.map (\(x,y) -> toString x ++ "," ++ toString y)
             |> List.intersperse " "
