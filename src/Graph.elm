@@ -1,4 +1,4 @@
-module Graph exposing (drawGraph, drawHorizontalLines, drawLegend)
+module Graph exposing (drawGraph, drawHorizontalLines, drawLegend, mapCoordinates)
 
 {-|
 Graph rendering library
@@ -6,6 +6,7 @@ Graph rendering library
 @docs drawGraph
 @docs drawHorizontalLines
 @docs drawLegend
+@docs mapCoordinates
 -}
 
 import Svg
@@ -13,17 +14,31 @@ import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
 
+{-|
+-}
+mapCoordinates : (Float, Float) -> (Float, Float) -> Float -> Float
+mapCoordinates (fromMin, fromMax) (toMin, toMax) val =
+    let
+        inRange = fromMax - fromMin
+        outRange = toMax - toMin
+
+        _ = Debug.log "inRange" inRange
+        _ = Debug.log "outRange" outRange
+    in
+        ((val - fromMin) / inRange) * outRange + toMin
+
 
 transformToGraphCoordinates : Bool -> Float -> (Float, Float) -> Float -> Float
-transformToGraphCoordinates invert viewHeight (minVal, maxVal) val =
-    let
-        minMaxRange = maxVal - minVal
-    in
-        if invert then
-            viewHeight - (viewHeight * ((val - minVal) / minMaxRange))
-        else
-            (viewHeight * ((val - minVal) / minMaxRange))
+transformToGraphCoordinates invert viewSize (minVal, maxVal) val =
+    if invert then
+        mapCoordinates (maxVal, minVal) (0, viewSize) val
+    else
+        mapCoordinates (minVal, maxVal) (0, viewSize) val
 
+
+transformFromGraphCoordinates : Float -> (Float, Float) -> Float -> Float
+transformFromGraphCoordinates viewSize (minVal, maxVal) val =
+    mapCoordinates (0, viewSize) (minVal, maxVal) val
 
 
 {-|
