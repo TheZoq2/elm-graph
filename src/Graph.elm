@@ -21,9 +21,6 @@ mapCoordinates (fromMin, fromMax) (toMin, toMax) val =
     let
         inRange = fromMax - fromMin
         outRange = toMax - toMin
-
-        _ = Debug.log "inRange" inRange
-        _ = Debug.log "outRange" outRange
     in
         ((val - fromMin) / inRange) * outRange + toMin
 
