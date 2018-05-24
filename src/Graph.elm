@@ -1,4 +1,9 @@
-module Graph exposing (drawGraph, drawHorizontalLines, drawLegend, mapCoordinates)
+module Graph exposing
+    ( drawGraph
+    , drawHorizontalLines
+    , drawLegend
+    , transformToGraphCoordinates
+    )
 
 {-|
 Graph rendering library
@@ -6,7 +11,7 @@ Graph rendering library
 @docs drawGraph
 @docs drawHorizontalLines
 @docs drawLegend
-@docs mapCoordinates
+@docs transformToGraphCoordinates
 -}
 
 import Svg
@@ -25,6 +30,8 @@ mapCoordinates (fromMin, fromMax) (toMin, toMax) val =
         ((val - fromMin) / inRange) * outRange + toMin
 
 
+{-|
+-}
 transformToGraphCoordinates : Bool -> Float -> (Float, Float) -> Float -> Float
 transformToGraphCoordinates invert viewSize (minVal, maxVal) val =
     if invert then
