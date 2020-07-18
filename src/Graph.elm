@@ -17,6 +17,8 @@ Graph rendering library
 import Svg
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import String exposing (fromFloat, fromInt)
+import Tuple exposing (pair)
 
 
 {-|
@@ -62,8 +64,8 @@ drawGraph (viewW, viewH) (minVal, maxVal) (minTime, maxTime) data =
 
         pointsString =
             List.map (transformToGraphCoordinates True (toFloat viewH) (minVal, maxVal)) y_points
-            |> List.map2 (,) x_points
-            |> List.map (\(x,y) -> toString x ++ "," ++ toString y)
+            |> List.map2 pair x_points
+            |> List.map (\(x,y) -> fromFloat x ++ "," ++ fromFloat y)
             |> List.intersperse " "
             |> String.concat
     in
@@ -78,8 +80,8 @@ drawHorizontalLines (viewW, viewH) valueRange verticalStep =
     let
         yCoords = (getHorizontalFixpoints viewH valueRange verticalStep)
     in
-        List.map toString yCoords
-        |> List.map (\y -> line [x1 "0", x2 <| toString viewW, y1 y, y2 y] [])
+        List.map fromFloat yCoords
+        |> List.map (\y -> line [x1 "0", x2 <| fromInt viewW, y1 y, y2 y] [])
         |> g [stroke "lightgray"]
 
 {-|
@@ -94,9 +96,9 @@ drawLegend unit viewH (min, max) verticalStep =
             List.range 0 (List.length yCoords)
             |> List.map (\y -> (toFloat y) * verticalStep + min)
     in
-        List.map2 (,) yCoords yValues
+        List.map2 pair yCoords yValues
         |> List.map (\(yCoord, yVal) ->
-                text_ [y <| toString yCoord, fontSize "10px"] [text <| toString yVal ++ unit] ) 
+                text_ [y <| fromFloat yCoord, fontSize "10px"] [text <| fromFloat yVal ++ unit] ) 
         |> g []
 
 
